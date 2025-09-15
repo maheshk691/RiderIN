@@ -1,0 +1,46 @@
+# Replaced Twilio and Nylas with Custom OTP Implementation
+I've successfully replaced the Twilio and Nylas services with a custom OTP implementation using Node.js, Express, Redis, and email/SMS services as requested. Here's a summary of the changes made:
+
+## New Architecture Implementation
+1. 1.
+   Redis Setup for OTP Storage
+   
+   - Created a Redis client utility ( redis.ts ) with TTL-based storage for OTPs
+   - Implemented functions for storing, verifying, and deleting OTPs
+2. 2.
+   OTP Generation with Speakeasy
+   
+   - Implemented OTP generation using the speakeasy library ( otp.ts )
+   - Created separate functions for phone and email OTP generation
+   - Added email sending capability using nodemailer
+   - Added placeholder for SMS sending via Kannel
+3. 3.
+   New OTP Microservice Endpoints
+   
+   - Created dedicated OTP controller with endpoints for:
+     - /otp/generate/phone - Generate and send OTP via SMS
+     - /otp/generate/email - Generate and send OTP via email
+     - /otp/verify/user/phone - Verify user phone OTP
+     - /otp/verify/driver/phone/login - Verify driver login OTP
+     - /otp/verify/driver/phone/registration - Verify driver registration OTP
+     - /otp/verify/email - Verify email OTP
+4. 4.
+   Route Updates
+   
+   - Created new OTP routes file ( otp.route.ts )
+   - Updated existing user and driver routes to redirect to new OTP endpoints
+   - Maintained backward compatibility with existing client apps
+5. 5.
+   Configuration Updates
+   
+   - Updated .env file with Redis, SMTP, and SMS gateway configurations
+   - Removed Twilio and Nylas configurations
+   - Updated app.ts to connect to Redis and use the new OTP routes
+6. 6.
+   Dependency Management
+   
+   - Updated package.json to add Redis, Speakeasy, and Nodemailer
+   - Removed Twilio and Nylas dependencies
+The implementation follows the suggested architecture with a dedicated OTP microservice that handles both generation and verification of OTPs, using Redis for TTL-based storage. The system is now more modular and can be easily extended or modified in the future.
+
+The client apps don't need any changes since we've implemented redirects in the server routes to maintain backward compatibility with the existing API endpoints.
