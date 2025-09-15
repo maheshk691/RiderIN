@@ -5,10 +5,16 @@ import color from '@/themes/app.colors';
 
 interface SkeletonLoaderProps {
   width?: number | string;
+<<<<<<< HEAD
   height?: number;
   borderRadius?: number;
   style?: any;
   testID?: string;
+=======
+  height?: number | string;
+  borderRadius?: number;
+  style?: any;
+>>>>>>> de753cf41284fb4b94982221c497e4f25fc50062
 }
 
 interface SkeletonRowProps {
@@ -16,7 +22,10 @@ interface SkeletonRowProps {
   lineHeight?: number;
   spacing?: number;
   style?: any;
+<<<<<<< HEAD
   testID?: string;
+=======
+>>>>>>> de753cf41284fb4b94982221c497e4f25fc50062
 }
 
 /**
@@ -26,7 +35,10 @@ const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
   width = '100%',
   height = windowHeight(20),
   borderRadius = 4,
+<<<<<<< HEAD
   testID,
+=======
+>>>>>>> de753cf41284fb4b94982221c497e4f25fc50062
   style,
 }) => {
   const animatedValue = React.useRef(new Animated.Value(0)).current;
@@ -48,12 +60,19 @@ const SkeletonLoader: React.FC<SkeletonLoaderProps> = ({
 
   const translateX = animatedValue.interpolate({
     inputRange: [0, 1],
+<<<<<<< HEAD
     outputRange: ['-100%', '100%'],
+=======
+    outputRange: [-width, width],
+>>>>>>> de753cf41284fb4b94982221c497e4f25fc50062
   });
 
   return (
     <View
+<<<<<<< HEAD
       testID={testID}
+=======
+>>>>>>> de753cf41284fb4b94982221c497e4f25fc50062
       style={[
         styles.container,
         { width, height, borderRadius },
@@ -81,10 +100,16 @@ export const SkeletonRow: React.FC<SkeletonRowProps> = ({
   lineHeight = windowHeight(20),
   spacing = windowHeight(10),
   style,
+<<<<<<< HEAD
   testID,
 }) => {
   return (
     <View testID={testID} style={[styles.rowContainer, style]}>
+=======
+}) => {
+  return (
+    <View style={[styles.rowContainer, style]}>
+>>>>>>> de753cf41284fb4b94982221c497e4f25fc50062
       {Array(lines)
         .fill(0)
         .map((_, index) => (
@@ -92,7 +117,10 @@ export const SkeletonRow: React.FC<SkeletonRowProps> = ({
             key={index}
             height={lineHeight}
             style={{ marginBottom: index < lines - 1 ? spacing : 0 }}
+<<<<<<< HEAD
             testID={`skeleton-line-${index}`}
+=======
+>>>>>>> de753cf41284fb4b94982221c497e4f25fc50062
           />
         ))}
     </View>
@@ -102,9 +130,15 @@ export const SkeletonRow: React.FC<SkeletonRowProps> = ({
 /**
  * Skeleton Card component for showing loading card UI
  */
+<<<<<<< HEAD
 export const SkeletonCard: React.FC<{ style?: any, testID?: string }> = ({ style, testID }) => {
   return (
     <View testID={testID} style={[styles.card, style]}>
+=======
+export const SkeletonCard: React.FC<{ style?: any }> = ({ style }) => {
+  return (
+    <View style={[styles.card, style]}>
+>>>>>>> de753cf41284fb4b94982221c497e4f25fc50062
       <View style={styles.cardHeader}>
         <SkeletonLoader width={windowWidth(50)} height={windowHeight(50)} borderRadius={25} />
         <View style={styles.cardHeaderContent}>
@@ -137,7 +171,11 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   card: {
+<<<<<<< HEAD
     backgroundColor: color.whiteColor,
+=======
+    backgroundColor: color.white,
+>>>>>>> de753cf41284fb4b94982221c497e4f25fc50062
     borderRadius: 8,
     padding: windowWidth(15),
     marginBottom: windowHeight(15),
@@ -163,4 +201,8 @@ const styles = StyleSheet.create({
   },
 });
 
+<<<<<<< HEAD
 export default SkeletonLoader;
+=======
+export default SkeletonLoader;
+>>>>>>> de753cf41284fb4b94982221c497e4f25fc50062

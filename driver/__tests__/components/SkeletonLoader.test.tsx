@@ -30,9 +30,17 @@ describe('SkeletonLoader Component', () => {
 describe('SkeletonRow Component', () => {
   it('renders the correct number of lines', () => {
     const { getAllByTestId } = render(
+<<<<<<< HEAD
       <SkeletonRow lines={3} testID="skeleton-row" />
     );
     const skeletonLines = getAllByTestId(/^skeleton-line-/);
+=======
+      <SkeletonRow lines={3} testID="skeleton-row">
+        <SkeletonLoader testID="skeleton-line" />
+      </SkeletonRow>
+    );
+    const skeletonLines = getAllByTestId('skeleton-line');
+>>>>>>> de753cf41284fb4b94982221c497e4f25fc50062
     expect(skeletonLines.length).toBe(3);
   });
 
@@ -42,9 +50,17 @@ describe('SkeletonRow Component', () => {
         lines={2} 
         lineHeight={30} 
         spacing={15} 
+<<<<<<< HEAD
         testID="skeleton-row" />
     );
     const skeletonLines = getAllByTestId(/^skeleton-line-/);
+=======
+        testID="skeleton-row">
+        <SkeletonLoader testID="skeleton-line" />
+      </SkeletonRow>
+    );
+    const skeletonLines = getAllByTestId('skeleton-line');
+>>>>>>> de753cf41284fb4b94982221c497e4f25fc50062
     expect(skeletonLines[0].props.style.height).toBe(30);
     expect(skeletonLines[0].props.style.marginBottom).toBe(15);
     expect(skeletonLines[1].props.style.marginBottom).toBe(0); // Last line has no margin
@@ -57,4 +73,8 @@ describe('SkeletonCard Component', () => {
     const skeletonCard = getByTestId('skeleton-card');
     expect(skeletonCard).toBeDefined();
   });
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> de753cf41284fb4b94982221c497e4f25fc50062
