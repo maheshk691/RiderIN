@@ -88,7 +88,7 @@ export default function SignupScreen() {
                 title="Country"
                 placeholder="Select your country"
                 value={formData.country}
-                onValueChange={(text) => handleChange("countryCode", text)}
+                onValueChange={(text) => handleChange("country", text)}
                 showWarning={showWarning && formData.country === ""}
                 items={countryNameItems}
               />

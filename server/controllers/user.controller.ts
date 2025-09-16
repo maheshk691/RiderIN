@@ -216,13 +216,20 @@ export const getLoggedInUserData = async (req: any, res: Response) => {
 // update user details
 export const updateUser = async (req: any, res: Response) => {
   try {
-    const { name } = req.body;
+     const { name } = req.body;
+   
+     if (!name || typeof name !== 'string' || name.trim().length === 0) {
+       return res.status(400).json({
+         success: false,
+         message: "Name is required and must be a non-empty string",
+       });
+    }
     const updatedUser = await prisma.user.update({
       where: {
         id: req.user.id,
       },
       data: {
-        name,
+        name: name.trim(),
       },
     });
     res.status(200).json({
