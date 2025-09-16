@@ -30,12 +30,22 @@ export default function RegistrationScreen() {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      await api.post('/user/update', {
+      // Call the registration/signup endpoint (assume /register-user or similar)
+      const res = await api.post('/register-user', {
         name: formData.name,
-        userId: parsedUser.id,
+        phone_number: parsedUser.phone_number,
       });
-      await AsyncStorage.setItem('accessToken', 'dummy_token'); // Mock token storage for cache
-      router.replace("/(tabs)/home");
+      const token = res.data?.accessToken;
+      if (token) {
+        await AsyncStorage.setItem('accessToken', token);
+        // Optionally, set the token in the API client if needed
+        // api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        router.replace("/(tabs)/home");
+      } else {
+        // If no token, remove any existing token
+        await AsyncStorage.removeItem('accessToken');
+        throw new Error('No access token returned from server');
+      }
     } catch (error) {
       console.log(error);
     } finally {

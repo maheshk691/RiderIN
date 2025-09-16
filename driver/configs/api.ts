@@ -19,7 +19,7 @@ api.interceptors.request.use(
   async (config) => {
     try {
       // Import dynamically to avoid circular dependency
-      const tokenStorage = (await import('@/utils/tokenStorage')).default;
+  const tokenStorage = (await import('../utils/tokenStorage')).default;
       const token = await tokenStorage.getAccessToken();
       
       if (token) {

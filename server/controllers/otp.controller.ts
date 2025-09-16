@@ -4,6 +4,12 @@ import { generateAndStoreOTP, generateAndStoreEmailOTP, sendOTPEmail, sendOTPSMS
 import { verifyOTP, deleteOTP } from '../utils/redis';
 import prisma from '../utils/prisma';
 import { sendToken } from '../utils/send-token';
+import twilio from "twilio";
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = twilio(accountSid, authToken, {
+  lazyLoading: true,
+});
 
 // Generate OTP for phone number
 export const generatePhoneOTP = async (req: Request, res: Response, next: NextFunction) => {
@@ -289,6 +295,110 @@ export const getFakeOTP = async (req: Request, res: Response, next: NextFunction
       fake_otp: fakeOTP,
       note: 'Use this OTP to test your application',
     });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    });
+  }
+};
+
+// Fake register user for testing (bypasses OTP)
+export const fakeRegisterUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    if (process.env.FAKE_OTP_ENABLED !== 'true') {
+      return res.status(403).json({
+        success: false,
+        message: 'Fake OTP mode is not enabled',
+      });
+    }
+
+    const { phone_number } = req.body;
+
+    if (!phone_number) {
+      return res.status(400).json({
+        success: false,
+        message: 'Phone number is required',
+      });
+    }
+
+    // Check if user exists
+    const isUserExist = await prisma.user.findUnique({
+      where: {
+        phone_number,
+      },
+    });
+
+    if (isUserExist) {
+      // User exists, send token
+      await sendToken(isUserExist, res);
+    } else {
+      // Create new user
+      const user = await prisma.user.create({
+        data: {
+          phone_number,
+        },
+      });
+
+      return res.status(201).json({
+        success: true,
+        message: 'Fake user registered successfully!',
+        user,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    });
+  }
+};
+
+// Fake register driver for testing (bypasses OTP)
+export const fakeRegisterDriver = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    if (process.env.FAKE_OTP_ENABLED !== 'true') {
+      return res.status(403).json({
+        success: false,
+        message: 'Fake OTP mode is not enabled',
+      });
+    }
+
+    const { phone_number } = req.body;
+
+    if (!phone_number) {
+      return res.status(400).json({
+        success: false,
+        message: 'Phone number is required',
+      });
+    }
+
+    // Check if driver exists
+    const isDriverExist = await prisma.driver.findUnique({
+      where: {
+        phone_number,
+      },
+    });
+
+    if (isDriverExist) {
+      // Driver exists, send token
+      sendToken(isDriverExist, res);
+    } else {
+      // Create new driver
+      const driver = await prisma.driver.create({
+        data: {
+          phone_number,
+        },
+      });
+
+      return res.status(201).json({
+        success: true,
+        message: 'Fake driver registered successfully!',
+        driver,
+      });
+    }
   } catch (error) {
     console.error(error);
     return res.status(500).json({

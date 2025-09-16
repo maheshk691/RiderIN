@@ -50,6 +50,66 @@ GET /api/v1/otp/test/fake-otp
 }
 ```
 
+#### Fake Register User (Skip OTP Verification)
+```
+POST /api/v1/otp/test/register-user
+```
+
+**Request Body:**
+```json
+{
+  "phone_number": "+919999999999"
+}
+```
+
+**Response for new user:**
+```json
+{
+  "success": true,
+  "message": "Fake user registered successfully!",
+  "user": { ...user object with phone_number only... }
+}
+```
+
+**Response for existing user:**
+```json
+{
+  "success": true,
+  "token": "jwt_token_here"
+  // Other auth response fields
+}
+```
+
+#### Fake Register Driver (Skip OTP Verification)
+```
+POST /api/v1/otp/test/register-driver
+```
+
+**Request Body:**
+```json
+{
+  "phone_number": "+919999999999"
+}
+```
+
+**Response for new driver:**
+```json
+{
+  "success": true,
+  "message": "Fake driver registered successfully!",
+  "driver": { ...driver object with phone_number only... }
+}
+```
+
+**Response for existing driver:**
+```json
+{
+  "success": true,
+  "token": "jwt_token_here"
+  // Other auth response fields
+}
+```
+
 #### Regular OTP Endpoints
 When fake mode is enabled, these endpoints will also use the fake OTP:
 - `POST /api/v1/otp/generate/phone` - Generate phone OTP
@@ -96,8 +156,9 @@ npm run start:dev
 
 #### User/Driver Registration:
 1. Go through the registration flow
-2. Enter `1234` for OTP verification
-3. All steps should work seamlessly
+2. Enter `1234` for OTP verification, or use fake registration endpoints to skip OTP entirely
+3. For even faster testing, directly call POST `/api/v1/otp/test/register-user` or `/api/v1/otp/test/register-driver` with phone_number
+4. All steps should work seamlessly
 
 #### Email Verification:
 1. During driver registration, enter any email

@@ -6,8 +6,7 @@ import styles from "./styles";
 import { useTheme } from "@react-navigation/native";
 import TitleView from "@/components/signup/title.view";
 import Input from "@/components/common/input";
-import SelectInput from "@/components/common/select-input";
-import { countryNameItems } from "@/configs/country-name-list";
+
 import Button from "@/components/common/button";
 import color from "@/themes/app.colors";
 import { router } from "expo-router";
@@ -18,8 +17,6 @@ export default function SignupScreen() {
   const [formData, setFormData] = useState({
     name: "",
     phoneNumber: "",
-    email: "",
-    country: "Bangladesh 🇧🇩",
   });
 
   const handleChange = (key: string, value: string) => {
@@ -34,15 +31,12 @@ export default function SignupScreen() {
       setShowWarning(true);
     } else {
       setShowWarning(false);
-      const phoneNumberData = countryNameItems.find(
-        (i: any) => i.label === formData.country
-      );
 
-      const phone_number = `+${phoneNumberData?.value}${formData.phoneNumber}`;
+      const phone_number = `+91${formData.phoneNumber}`;
 
       const driverData = {
         name: formData.name,
-        country: formData.country,
+        country: "India 🇮🇳",
         phone_number: phone_number,
       };
       router.push({
@@ -84,14 +78,7 @@ export default function SignupScreen() {
                 showWarning={showWarning && formData.name === ""}
                 warning={"Please enter your name!"}
               />
-              <SelectInput
-                title="Country"
-                placeholder="Select your country"
-                value={formData.country}
-                onValueChange={(text) => handleChange("country", text)}
-                showWarning={showWarning && formData.country === ""}
-                items={countryNameItems}
-              />
+
               <Input
                 title="Phone Number"
                 placeholder="Enter your phone number"

@@ -6,7 +6,9 @@ import {
   verifyDriverPhoneOTPLogin,
   verifyDriverPhoneOTPRegistration,
   verifyEmailOTP,
-  getFakeOTP
+  getFakeOTP,
+  fakeRegisterUser,
+  fakeRegisterDriver
 } from '../controllers/otp.controller';
 
 const otpRouter = express.Router();
@@ -23,5 +25,7 @@ otpRouter.post('/verify/email', verifyEmailOTP);
 
 // Testing endpoint
 otpRouter.get('/test/fake-otp', getFakeOTP);
+otpRouter.post('/test/register-user', fakeRegisterUser);
+otpRouter.post('/test/register-driver', fakeRegisterDriver);
 
 export default otpRouter;

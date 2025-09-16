@@ -108,11 +108,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: windowWidth(20),
-<<<<<<< HEAD
     backgroundColor: color.whiteColor,
-=======
-    backgroundColor: color.white,
->>>>>>> de753cf41284fb4b94982221c497e4f25fc50062
   },
   title: {
     fontSize: windowHeight(24),
@@ -141,11 +137,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: windowHeight(12),
-<<<<<<< HEAD
     color: color.alertRed,
-=======
-    color: color.danger,
->>>>>>> de753cf41284fb4b94982221c497e4f25fc50062
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -163,18 +155,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
-<<<<<<< HEAD
     color: color.whiteColor,
-=======
-    color: color.white,
->>>>>>> de753cf41284fb4b94982221c497e4f25fc50062
     fontSize: windowHeight(16),
     fontWeight: 'bold',
   },
 });
 
-<<<<<<< HEAD
 export default ErrorBoundary;
-=======
-export default ErrorBoundary;
->>>>>>> de753cf41284fb4b94982221c497e4f25fc50062
