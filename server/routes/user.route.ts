@@ -2,6 +2,7 @@ import express from "express";
 import {
   getAllRides,
   getLoggedInUserData,
+  updateUser,
 } from "../controllers/user.controller";
 import { isAuthenticated } from "../middleware/isAuthenticated";
 
@@ -23,6 +24,8 @@ userRouter.post("/email-otp-request", (req, res) => {
 userRouter.put("/email-otp-verify", (req, res) => {
   res.redirect(307, "/api/v1/otp/verify/email");
 });
+
+userRouter.put("/update", isAuthenticated, updateUser);
 
 userRouter.get("/me", isAuthenticated, getLoggedInUserData);
 

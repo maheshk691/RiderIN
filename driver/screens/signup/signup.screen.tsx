@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import { windowHeight, windowWidth } from "@/themes/app.constant";
 import ProgressBar from "@/components/common/progress.bar";
@@ -14,7 +14,6 @@ import { router } from "expo-router";
 
 export default function SignupScreen() {
   const { colors } = useTheme();
-  const [emailFormatWarning, setEmailFormatWarning] = useState("");
   const [showWarning, setShowWarning] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -31,12 +30,7 @@ export default function SignupScreen() {
   };
 
   const gotoDocument = () => {
-    const isEmailEmpty = formData.email.trim() === "";
-    const isEmailInvalid = !isEmailEmpty && emailFormatWarning !== "";
-
-    if (isEmailEmpty) {
-      setShowWarning(true);
-    } else if (isEmailInvalid) {
+    if (formData.name.trim() === "" || formData.phoneNumber.trim() === "" ) {
       setShowWarning(true);
     } else {
       setShowWarning(false);
@@ -50,7 +44,6 @@ export default function SignupScreen() {
         name: formData.name,
         country: formData.country,
         phone_number: phone_number,
-        email: formData.email,
       };
       router.push({
         pathname: "/(routes)/document-verification",
@@ -108,32 +101,18 @@ export default function SignupScreen() {
                 showWarning={showWarning && formData.phoneNumber === ""}
                 warning={"Please enter your phone number!"}
               />
-              <Input
-                title={"Email Address"}
-                placeholder={"Enter your email address"}
-                keyboardType="email-address"
-                value={formData.email}
-                onChangeText={(text) => handleChange("email", text)}
-                showWarning={
-                  showWarning &&
-                  (formData.email === "" || emailFormatWarning !== "")
-                }
-                warning={
-                  emailFormatWarning !== ""
-                    ? "Please enter your email!"
-                    : "Please enter a validate email!"
-                }
-                emailFormatWarning={emailFormatWarning}
-              />
             </View>
             <View style={styles.margin}>
               <Button
                 onPress={gotoDocument}
                 height={windowHeight(30)}
-                title={"Next"}
+                title={"Sign Up"}
                 backgroundColor={color.buttonBg}
                 textColor={color.whiteColor}
               />
+              <TouchableOpacity style={newStyles.loginLink} onPress={() => router.push('/(routes)/login')}>
+                <Text style={newStyles.loginText}>Already have an account? Login</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -141,3 +120,15 @@ export default function SignupScreen() {
     </ScrollView>
   );
 }
+
+const newStyles = StyleSheet.create({
+  loginLink: {
+    marginTop: windowHeight(10),
+    alignItems: 'center',
+  },
+  loginText: {
+    color: color.buttonBg,
+    fontSize: windowHeight(16),
+    textDecorationLine: 'underline',
+  },
+});

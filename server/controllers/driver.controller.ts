@@ -100,7 +100,27 @@ export const verifyPhoneOtpForRegistration = async (
           code: otp,
         });
 
-      await sendingOtpToEmail(req, res);
+      // is driver exist
+      const isDriverExist = await prisma.driver.findUnique({
+        where: {
+          phone_number,
+        },
+      });
+      if (isDriverExist) {
+        await sendToken(isDriverExist, res);
+      } else {
+        // create account
+        const driver = await prisma.driver.create({
+          data: {
+            phone_number: phone_number,
+          },
+        });
+        res.status(200).json({
+          success: true,
+          message: "OTP verified successfully!",
+          driver: driver,
+        });
+      }
     } catch (error) {
       console.log(error);
       res.status(400).json({
@@ -403,6 +423,49 @@ export const updatingRideStatus = async (req: any, res: Response) => {
     res.status(400).json({
       success: false,
       message: error.message,
+    });
+  }
+};
+
+// update driver details
+export const updateDriver = async (req: any, res: Response) => {
+  try {
+    const {
+      name,
+      country,
+      email,
+      vehicle_type,
+      registration_number,
+      registration_date,
+      driving_license,
+      vehicle_color,
+      rate,
+    } = req.body;
+    const updatedDriver = await prisma.driver.update({
+      where: {
+        id: req.driver.id,
+      },
+      data: {
+        name,
+        country,
+        email,
+        vehicle_type,
+        registration_number,
+        registration_date,
+        driving_license,
+        vehicle_color,
+        rate,
+      },
+    });
+    res.status(200).json({
+      success: true,
+      driver: updatedDriver,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      success: false,
+      message: "Failed to update driver",
     });
   }
 };

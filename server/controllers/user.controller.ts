@@ -213,6 +213,31 @@ export const getLoggedInUserData = async (req: any, res: Response) => {
   }
 };
 
+// update user details
+export const updateUser = async (req: any, res: Response) => {
+  try {
+    const { name } = req.body;
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: req.user.id,
+      },
+      data: {
+        name,
+      },
+    });
+    res.status(200).json({
+      success: true,
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      success: false,
+      message: "Failed to update user",
+    });
+  }
+};
+
 // getting user rides
 export const getAllRides = async (req: any, res: Response) => {
   const rides = await prisma.rides.findMany({

@@ -4,6 +4,7 @@ import {
   getDriversById,
   getLoggedInDriverData,
   newRide,
+  updateDriver,
   updateDriverStatus,
   updatingRideStatus,
 } from "../controllers/driver.controller";
@@ -31,6 +32,8 @@ driverRouter.post("/registration-driver", (req, res) => {
 driverRouter.get("/me", isAuthenticatedDriver, getLoggedInDriverData);
 
 driverRouter.get("/get-drivers-data", getDriversById);
+
+driverRouter.put("/update", isAuthenticatedDriver, updateDriver);
 
 driverRouter.put("/update-status", isAuthenticatedDriver, updateDriverStatus);
 

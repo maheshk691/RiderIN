@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, StyleSheet } from "react-native";
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { useTheme } from "@react-navigation/native";
 import { windowHeight, windowWidth } from "@/themes/app.constant";
@@ -7,18 +7,16 @@ import Input from "@/components/common/input";
 import Button from "@/components/common/button";
 import color from "@/themes/app.colors";
 import { router, useLocalSearchParams } from "expo-router";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from "@/configs/api";
 
 export default function RegistrationScreen() {
   const { colors } = useTheme();
   const { user } = useLocalSearchParams() as any;
   const parsedUser = JSON.parse(user);
-  const [emailFormatWarning, setEmailFormatWarning] = useState("");
   const [showWarning, setShowWarning] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
-    phoneNumber: "",
-    email: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -28,34 +26,21 @@ export default function RegistrationScreen() {
       [key]: value,
     }));
   };
-  
 
   const handleSubmit = async () => {
     setLoading(true);
-    await api
-      .post(`/email-otp-request`, {
-        email: formData.email,
+    try {
+      await api.post('/user/update', {
         name: formData.name,
         userId: parsedUser.id,
-      }) 
-      .then((res) => {
-        setLoading(false);
-        const userData: any = {
-          id: parsedUser.id,
-          name: formData.name,
-          email: formData.email,
-          phone_number: parsedUser.phone_number,
-          token: res.data.token,
-        };
-        router.push({
-          pathname: "/(routes)/email-verification",
-          params: { user: JSON.stringify(userData) },
-        });
-      })
-      .catch((error) => {
-        setLoading(false);
-        console.log(error);
       });
+      await AsyncStorage.setItem('accessToken', 'dummy_token'); // Mock token storage for cache
+      router.replace("/(tabs)/home");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -95,31 +80,17 @@ export default function RegistrationScreen() {
                 value={parsedUser?.phone_number}
                 disabled={true}
               />
-              <Input
-                title="Email Address"
-                placeholder="Enter your email address"
-                keyboardType="email-address"
-                value={formData.email}
-                onChangeText={(text) => handleChange("email", text)}
-                showWarning={
-                  (showWarning && formData.name === "") ||
-                  emailFormatWarning !== ""
-                }
-                warning={
-                  emailFormatWarning !== ""
-                    ? "Please enter your email!"
-                    : "Please enter a validate email!"
-                }
-                emailFormatWarning={emailFormatWarning}
-              />
               <View style={styles.margin}>
                 <Button
                   onPress={() => handleSubmit()}
-                  title="Next"
+                  title="Sign Up"
                   disabled={loading}
                   backgroundColor={color.buttonBg}
                   textColor={color.whiteColor}
                 />
+                <TouchableOpacity style={styles.loginLink} onPress={() => router.push('/(routes)/login')}>
+                  <Text style={styles.loginText}>Already have an account? Login</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -141,5 +112,14 @@ const styles = StyleSheet.create({
   },
   margin: {
     marginVertical: windowHeight(12),
+  },
+  loginLink: {
+    marginTop: windowHeight(10),
+    alignItems: 'center',
+  },
+  loginText: {
+    color: color.buttonBg,
+    fontSize: windowHeight(16),
+    textDecorationLine: 'underline',
   },
 });
