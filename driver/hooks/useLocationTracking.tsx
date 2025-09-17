@@ -16,10 +16,11 @@ interface UseLocationTrackingOptions {
   timeInterval?: number; // Minimum time (in milliseconds) between updates
   accuracy?: Location.Accuracy; // Location accuracy
   onLocationUpdate?: (location: LocationData) => void; // Callback for location updates
+  highAccuracy?: boolean; // Enable higher precision tracking
 }
 
 /**
- * Custom hook for optimized location tracking
+ * Custom hook for optimized location tracking with high precision option
  */
 const useLocationTracking = (options: UseLocationTrackingOptions = {}) => {
   const {
@@ -27,6 +28,7 @@ const useLocationTracking = (options: UseLocationTrackingOptions = {}) => {
     timeInterval = 5000, // Update every 5 seconds by default
     accuracy = Location.Accuracy.Balanced,
     onLocationUpdate,
+    highAccuracy = false, // Default to normal accuracy
   } = options;
 
   const [location, setLocation] = useState<LocationData | null>(null);
@@ -124,7 +126,9 @@ const useLocationTracking = (options: UseLocationTrackingOptions = {}) => {
         setLocation(locationData);
         onLocationUpdate?.(locationData);
 
-        if (isOnline) {
+        if (highAccuracy && isOnline) {
+          updateDriverLocation(locationData.latitude, locationData.longitude);
+        } else if (isOnline) {
           updateDriverLocation(locationData.latitude, locationData.longitude);
         }
 
